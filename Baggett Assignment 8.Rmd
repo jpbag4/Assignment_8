@@ -1,0 +1,58 @@
+---
+title: "Baggett BCH 709 Assignment 8"
+output: html_document
+---
+# Install Packages
+
+```{r}
+#If not installed uncomment
+#install.packages("tidyverse")
+
+```
+#Load Packages
+```{r}
+library(tidyverse)
+```
+# Load dataset
+```{r}
+#If not installed uncomment
+#install.packages("gapminder")
+library(gapminder)
+gapminder_dataset<- gapminder
+```
+# Summarize and Visualize
+```{r}
+summary(gapminder_dataset)
+hist(x= log(gapminder_dataset$pop))
+plot(y = gapminder_dataset$lifeExp, x = log(gapminder_dataset$gdpPercap))
+
+df1 <- gapminder_dataset %>% 
+  select(country, lifeExp) %>% 
+  filter(country == "South Africa" |
+            country == "Ireland")
+  
+t.test(data = df1, lifeExp ~ country)
+
+```
+# GGPLOT2
+```{r}
+gapminder_dataset %>% 
+  filter( gdpPercap < 50000) %>% 
+  ggplot(aes( x= log(gdpPercap) , y = lifeExp , col = continent, size = pop)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = lm)
+  
+#faceted
+gapminder_dataset %>% 
+  filter( gdpPercap < 50000) %>% 
+  ggplot(aes( x= log(gdpPercap) , y = lifeExp , col = year, size = pop)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = lm) +
+  facet_wrap(~continent)
+
+```
+#Linear Regresion
+```{r}
+summary(gapminder_dataset %>% 
+lm(formula= lifeExp ~ gdpPercap + pop))
+```
